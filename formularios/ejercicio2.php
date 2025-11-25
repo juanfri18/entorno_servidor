@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Ejercicio 1</title>
+<title>Ejercicio 2</title>
 <form name="tabla" method="get" action="">
     Numero<br>
     <input name="numero" type="text"><br>

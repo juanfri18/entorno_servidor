@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Ejercicio 3</title>
+<title>Ejercicio 4</title>
 <style>
      table {
             border-collapse: collapse;
@@ -30,12 +30,19 @@ if(isset($_GET["numero1"]) && isset($_GET["numero2"]) &&isset($_GET["numero3"]) 
     $numero1=$_GET["numero1"];
     $numero2=$_GET["numero2"];
     $numero3=$_GET["numero3"];
-    $numeros=[$numero1,$numero2,$numero3];
-  sort($numeros);
-    foreach($numeros as $numero){
-        echo"<tr><td>$numero</td></tr>";
-    }
-}else{
+    echo "<tr><td>Valor 1</td><td>$numero1</td></tr>";
+    echo "<tr><td>Valor 2</td><td>$numero2</td></tr>";
+    echo "<tr><td>Valor 3</td><td>$numero3</td></tr>";
+    echo "<tr><td>Valor1+Valor2</td><td>".$numero1+$numero2."</td></tr>";
+    echo "<tr><td>Valor2*Valor3</td><td>".$numero2*$numero3."</td></tr>";
+    echo "<tr><td>Valor1/Valor3</td><td>".$numero1/$numero3."</td></tr>";
+    echo "<tr><td>Valor1+Valor2+Valor3</td><td>".$numero1+$numero2+$numero3."</td></tr>";
+    echo "<tr><td>(valor2 + valor3) / valor1</td><td>".($numero2+$numero3)/$numero1."</td></tr>";
+
+
+
+
+    }else{
         echo"No has intoducido todos los numeros";
     }
 ?>
