@@ -1,0 +1,34 @@
+<form name="contacto" method="get" action="ejemplo.php">
+    Nombre<br>
+    <input name="nombre" type="text"><br><br>
+
+    Apellidos<br>
+    <input name="apellidos" type="text"><br><br>
+
+    Correo electrónico<br>
+    <input name="email" type="text"><br><br>
+
+    ¿Qué apartado te ha gustado más?<br>
+    <select name="seccion">
+        <option value="0" selected>--- Elige sección ---</option>
+        <option value="presentacion">Presentación</option>
+        <option value="intro">Introducción</option>
+        <option value="texto">Formato de texto</option>
+        <option value="enlaces">Hiperenlaces</option>
+        <option value="imagenes">Imágenes</option>
+    </select>
+    <br><br>
+
+    ¿Desea suscribirse a nuestro servicio de noticias?<br>
+    Sí <input name="suscripcion" type="radio" value="si" checked>
+    No <input name="suscripcion" type="radio" value="no">
+    <br><br>
+
+    Escriba aquí su consulta<br>
+    <textarea name="consulta" rows="10" cols="30">Consulta...</textarea>
+    <br><br>
+
+    <input name="enviar" type="submit" value="Enviar">
+    <input name="cancelar" type="reset" value="Cancelar">
+
+</form>
