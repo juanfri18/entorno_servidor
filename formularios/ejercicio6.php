@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Ejercicio 5</title>
+<title>Ejercicio 3</title>
 <style>
      table {
             border-collapse: collapse;
@@ -17,25 +17,25 @@
         }
 </style>
 <form name="tabla" method="get" action="">
-    Numero<br>
-    <input name="numero1" type="text"><br>
-    <input name="numero2" type="text"><br>
+    nombre<br>
+    <input name="nombre" type="text"><br>
+    edad<br>
+
+    <input name="edad" type="text"><br>
 
     <input name="enviar" type="submit" value="Enviar"><br><br>
 </form>
 <?php
-if(isset($_GET["numero1"]) && isset($_GET["numero2"]) ){
-    $numero1=$_GET["numero1"];
-    $numero2=$_GET["numero2"];
-    if($numero1<$numero2){
-        for($i=$numero1;$i<=$numero2;$i++){
-            echo "$i <br>";
-        }
+if(isset($_GET["nombre"]) && isset($_GET["edad"]) ){
+
+    $nombre=$_GET["nombre"];
+    $edad=$_GET["edad"];
+    if($edad<18){
+        echo " $nombre tiene $edad, es menor de edad.";
     }else{
-        for($i=$numero2;$i<=$numero1;$i++){
-            echo "$i <br>";
-        }
+        echo " $nombre tiene $edad, es mayor de edad.";
     }
+
 }else{
         echo"No has intoducido todos los numeros";
     }
