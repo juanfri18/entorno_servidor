@@ -38,67 +38,77 @@ echo"La fecha maxima en la que puedes devoler el libro es $dia_dev de $dia_mes d
 }
 
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Library Calculator</title>
+    <title>Ejercicio 4 - Devolución Libro</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .mensaje { padding: 10px; border: 1px solid #ccc; margin-top: 10px; background-color: #f9f9f9; }
+        .rojo { color: red; font-weight: bold; }
+        .verde { color: green; font-weight: bold; }
+        .azul { color: blue; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-<form name="tabla" method="get" action="">
-    <h2>Book Return Calculator</h2>
-    <h3>Format: "aaaa-mm-dd" (Ex: 2023-12-03)</h3>
-    Date I borrowed the book:<br>
-    <input name="fecha" type="text" placeholder="2023-12-03" required><br>
-    <input name="enviar" type="submit" value="Send"><br><br>
-</form>
-
-<?php //IA
-if(isset($_GET["fecha"])){
-    
-    // 1. Convertir la fecha introducida a timestamp
-    $fecha_inicio = strtotime($_GET["fecha"]);
-    
-    // 2. Calcular la fecha de devolución (+15 días)
-    // 15 días * 24 horas * 60 min * 60 seg
-    $seg_dev = $fecha_inicio + (15 * 24 * 60 * 60);
-
-    // Variables para mostrar la fecha (date devuelve inglés por defecto)
-    $dia_dev = date("d", $seg_dev);
-    $mes_dev = date("F", $seg_dev); // Ej: December
-    $anio_dev = date("Y", $seg_dev);
-
-    echo "<h3>The deadline is: $mes_dev $dia_dev, $anio_dev</h3>";
-
-    // 3. Obtener el 'HOY' limpio (00:00:00 horas)
-    // Usamos strtotime("today") en lugar de time() para evitar decimales raros
-    $fecha_hoy = strtotime("today"); 
-
-    // 4. Calcular diferencia
-    $diferencia_segundos = $seg_dev - $fecha_hoy;
-    
-    // Convertimos a entero (intval) dividiendo entre los segundos de un día (86400)
-    $dias_diferencia = intval($diferencia_segundos / 86400);
-
-    // LÓGICA DE MENSAJES
-    if($dias_diferencia > 0){
-        echo "<p style='color:green'>You have <strong>$dias_diferencia</strong> days left to return the book.</p>";
-    } 
-    elseif($dias_diferencia == 0){
-        echo "<p style='color:orange'>Today is the due date!</p>";
-    } 
-    else {
-        // Al ser negativo, multiplicamos por -1 para mostrarlo positivo
-        $dias_retraso = $dias_diferencia * -1;
-        $multa = $dias_retraso * 3;
+    <form name="tabla" method="get" action="">
+        <h2>Control de devolución de libros</h2>
         
-        echo "<p style='color:red'>You are <strong>$dias_retraso</strong> days late.</p>";
-        echo "<p>You must pay a fine of: <strong>$multa euros</strong>.</p>";
-    }
-}
-?>
+        <!-- Usamos type="date" para facilitar la entrada y evitar errores de formato -->
+        <label>Introduce la fecha en la que tenías que devolver el libro:</label><br>
+        <input name="fecha_limite" type="date" required value="<?php echo isset($_GET['fecha_limite']) ? $_GET['fecha_limite'] : ''; ?>"><br><br>
+        
+        <input name="enviar" type="submit" value="Comprobar"><br><br>
+    </form>
 
+    <?php
+    if (isset($_GET["fecha_limite"])) {
+        
+        // 1. Obtenemos las fechas
+        // Fecha límite introducida por el usuario (seteada a las 00:00:00 internamente)
+        $fecha_limite_str = $_GET["fecha_limite"];
+        $ts_limite = strtotime($fecha_limite_str); 
+
+        // Fecha de hoy (NORMALIZADA): Importante usar date("Y-m-d") para quitar las horas/minutos/segundos
+        // y comparar solo días. Si usamos time(), la hora exacta afectaría al cálculo.
+        $hoy_str = date("Y-m-d");
+        $ts_hoy = strtotime($hoy_str);
+
+        // 2. Calculamos la diferencia en segundos
+        // Restamos Hoy - Limite
+        $segundos_diferencia = $ts_hoy - $ts_limite;
+
+        // 3. Convertimos a días (60 seg * 60 min * 24 horas = 86400)
+        // Usamos floor o redondeo simple ya que hemos normalizado las horas a 00:00
+        $dias_diferencia = $segundos_diferencia / 86400;
+
+        echo "<div class='mensaje'>";
+        echo "Fecha límite: " . date("d-m-Y", $ts_limite) . "<br>";
+        echo "Fecha de hoy: " . date("d-m-Y", $ts_hoy) . "<br><br>";
+
+        // 4. Lógica del enunciado
+        if ($dias_diferencia > 0) {
+            // Caso: RETRASO (Hoy es mayor que la fecha límite)
+            $multa = $dias_diferencia * 3; // 3 euros por día
+            echo "<span class='rojo'>El libro está devuelto con retraso.</span><br>";
+            echo "Días de retraso: " . $dias_diferencia . "<br>";
+            echo "Multa a pagar: " . $multa . "€";
+
+        } elseif ($dias_diferencia == 0) {
+            // Caso: DÍA EXACTO
+            echo "<span class='azul'>Hoy es justamente la fecha de entrega. ¡Estás a tiempo!</span>";
+
+        } else {
+            // Caso: AÚN QUEDA TIEMPO (Diferencia negativa)
+            // Usamos abs() para mostrar el número en positivo
+            $dias_restantes = abs($dias_diferencia);
+            echo "<span class='verde'>Todavía estás a tiempo.</span><br>";
+            echo "Te sobran " . $dias_restantes . " días para devolverlo.";
+        }
+        echo "</div>";
+    }
+    ?>
 </body>
 </html>
