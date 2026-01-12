@@ -21,8 +21,7 @@ abstract class Vehiculo{
         if(($edad->y)>5){
             $salud=$salud-25;
         }
-        $kilometraje=$this->kilometraje;
-        if($kilometraje>20000){
+        if($this->kilometraje>20000){
             $salud=$salud-25;
         }
         return $salud;
@@ -47,6 +46,17 @@ abstract class Vehiculo{
 
     abstract public function calcularAutonomia();
 
+    public function __toString(){
+        $fecha=new DateTime($this->fechaAdquisicion);
+        $fecha_formateada=$fecha->format('d/m/Y');
+        if(!empty($this->extras)){
+            $lista_extras = implode(", ",$this->extras);
+        } else {
+            $lista_extras = "Ninguno";
+        }
+        $frase="$this->nombre (ID: $this->id) | Adquirido: $fecha_formateada | Extras:$lista_extras .";
+        return $frase;
+    }
 
 }
 
