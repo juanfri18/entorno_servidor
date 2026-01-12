@@ -1,23 +1,29 @@
-<?php 
-class vehiculo{
-    public $nombre;
+<?php
+class Vehiculo {
+    private $nombre;
     private $tipo;
     private $peso;
 
-    public function __contruct($nombre,$tipo,$peso){
-        $this->nombre=$nombre;
-        $this->tipo=$tipo;
-        $this->peso=$peso;
+    public function __construct($n, $t, $p) {
+        $this->nombre = $n;
+        $this->tipo = $t;
+        $this->peso = $p;
     }
-    public function __get($propiedad){
-        return $this->$propiedad;
+
+    public function get($propiedad) {
+        if (property_exists($this, $propiedad)) {
+            return $this->$propiedad;
+        }
     }
-    public function __set($propiedad,$valor){
-        $this->$propiedad=$valor;
-    }
-    public function __toString(){
-        $salida="el vehiculo $this->nombre es de tipo $this->tipo y pesa $this->peso toneladas. ";
-        return $salida;
+
+    public function __toString() {
+        switch ($this->tipo) {
+            case 'C': $tipoTexto = "Camión"; break;
+            case 'M': $tipoTexto = "Moto"; break;
+            case 'T': $tipoTexto = "Turismo"; break;
+            default:  $tipoTexto = "Desconocido"; break;
+        }
+        return "Vehículo: $this->nombre | Tipo: $tipoTexto | Peso: $this->peso toneladas.";
     }
 }
 ?>
