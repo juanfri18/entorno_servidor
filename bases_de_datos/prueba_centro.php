@@ -4,7 +4,7 @@ $conexion->set_charset('utf8');
 $sentencia="select * from alumnos where edad<= ?";
 
 $consulta=$conexion->prepare($sentencia);
-$edad=18;
+$edad=21;
 $consulta->bind_param("i",$edad);
 $consulta->bind_result($dni,$edad,$nombre);
 $consulta->execute();
