@@ -1,15 +1,18 @@
 <?php
 $conexion=new mysqli('localhost','root','','centro');
 $conexion->set_charset('utf8');
-$consulta="select nombre, edad from alumnos";
-$resultado=$conexion->query($consulta);
-$numero_filas=$resultado->num_rows;
-echo"se han encontrado $numero_filas alumnos";
+$sentencia="select * from alumnos where edad<= ?";
 
-while($fila=$resultado->fetch_array(MYSQLI_ASSOC)){
-    echo"<br> $fila[nombre] tienen $fila[edad] años";
+$consulta=$conexion->prepare($sentencia);
+$edad=18;
+$consulta->bind_param("i",$edad);
+$consulta->bind_result($dni,$edad,$nombre);
+$consulta->execute();
+
+echo"mostrando los alumnos busacdos <br>";
+while($consulta->fetch()){
+echo "- $dni,$nombre,$edad <br>";
 }
 
-$conexion->close();
-
+$consulta->close();
 ?>
