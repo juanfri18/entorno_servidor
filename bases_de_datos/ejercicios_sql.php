@@ -54,14 +54,15 @@ while($fila=$resultado6->fetch_array(MYSQLI_ASSOC)){
 echo "<br><br>";
 
 //ejercicio 7
-$consulta7="SELECT alumnos.dni,alumnos.nombre,asignaturas.nombre,matriculas.año,matriculas.nota FROM alumnos,asignaturas,matriculas
+$consulta7="SELECT alumnos.dni,alumnos.nombre AS nombre_alumno,asignaturas.nombre AS nombre_asignatura,matriculas.año,matriculas.nota FROM alumnos,asignaturas,matriculas
 WHERE alumnos.dni=matriculas.dni AND asignaturas.codigo=matriculas.codigo";
 $resultado7=$conexion->query($consulta7);
 echo "<br>  ";
 while($fila=$resultado7->fetch_array(MYSQLI_ASSOC)){
-    echo"<br> dni: $fila[dni] código: $fila[codigo] nota: $fila[nota]";
+   echo "<br> DNI: $fila[dni] | Alumno: $fila[nombre_alumno] | Asignatura: $fila[nombre_asignatura] | Año: $fila[año] | Nota: $fila[nota]";
 }
 echo "<br><br>";
+// ejercicio 8
 
 
 
