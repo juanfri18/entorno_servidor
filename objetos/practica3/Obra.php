@@ -16,7 +16,7 @@ abstract class Obra implements Dramaturgico {
 
     //metodos
     public function __construct($titulo,$genero,$duracion,$fechaEstreno,$personajes){
-        if(!preg_match('/^[0-9]{2}-[0-9]{2}-[0-9]{4}$/',$fechaEstreno)){
+        if(!preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/',$fechaEstreno)){
             throw new Exception("la fecha introducido no es correcta, debe tener un formato: DD-MM-AAAA ");
         }
         if($duracion<=0){
@@ -34,7 +34,20 @@ abstract class Obra implements Dramaturgico {
         $fecha_hoy=new DateTime();
         $fechaEstreno=new DateTime($this->fechaEstreno);
         $diferenciaFechas=$fecha_hoy->diff($fechaEstreno);
+        $diasRestantes=$diferenciaFechas->days;
+        return $diasRestantes;
     }
+    public function __toString(){
+        $titulo=$this->titulo;
+        $genero=$this->genero;
+        $fechaEstreno=new DateTime($this->fechaEstreno);
+        $fechaFormateada=$fechaEstreno->format("d-m-Y");
+        return "titulo: $titulo --Genero: $genero -- Estreno:$fechaFormateada";
+    }
+    //metodo abstrabcto
+    public abstract function nivelProduccion();
+
+
 }
 
 ?>
