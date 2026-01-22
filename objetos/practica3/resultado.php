@@ -20,7 +20,7 @@
         $actores = trim($lineas[4]); 
         try{
             if($tipo=='COMEDIA'){
-
+                
             }elseif($tipo=='DRAMA'){
 
             }
