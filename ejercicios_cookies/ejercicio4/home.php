@@ -1,9 +1,6 @@
 <?php
 session_start();
-
-// SEGURIDAD: Verificar si el usuario está autenticado [cite: 292]
 if (!isset($_SESSION["auth"]) || $_SESSION["auth"] !== true) {
-    // Si no está logueado, lo mandamos fuera
     header("Location: login.php");
     exit();
 }

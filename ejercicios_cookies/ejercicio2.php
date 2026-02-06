@@ -1,15 +1,11 @@
 <?php
-// 1. Lógica para GUARDAR la preferencia (antes del HTML)
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tema_elegido = $_POST["tema"];
-    // Guardamos la cookie por 30 días
     setcookie("tema", $tema_elegido, time() + (30 * 24 * 60 * 60));
     
-    // Truco: Actualizamos la variable $tema_actual al momento para que el cambio de color sea instantáneo
     $tema_actual = $tema_elegido;
 } else {
-    // 2. Lógica para LEER la preferencia
-    // Si existe la cookie la usamos, si no, por defecto "claro"
     $tema_actual = $_COOKIE["tema"] ?? "claro";
 }
 ?>
@@ -20,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Ejercicio 2: Tema</title>
     <style>
         body {
-            /* Aplicamos el estilo según la variable PHP */
             background-color: <?php echo ($tema_actual == 'oscuro') ? '#333' : '#FFF'; ?>;
             color: <?php echo ($tema_actual == 'oscuro') ? '#FFF' : '#000'; ?>;
         }
