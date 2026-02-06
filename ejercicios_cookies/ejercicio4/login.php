@@ -13,11 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $_POST["usuario"];
     $pass = $_POST["password"];
 
+    // Comprobamos si el usuario existe y la contraseña coincide
     if (isset($usuarios_db[$user]) && $usuarios_db[$user] == $pass) {
 
         $_SESSION["user"] = $user;
-        $_SESSION["auth"] = true;
+        $_SESSION["auth"] = true; // Marca de autenticado
         
+        // Redirigir a la zona privada
         header("Location: home.php");
         exit(); 
     } else {
