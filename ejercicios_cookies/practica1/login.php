@@ -20,6 +20,33 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             $_SESSION["nombre"] = $fila['nombre'];
             $_SESSION["auth"] = true; 
             
+            // 1. Limpiamos cualquier cookie vieja por si acaso
+            setcookie("alerta_evento", "", time() - 3600); 
+
+            // 2. Consultamos si hay eventos en las próximas 24h
+            // Usamos TIMESTAMP() de SQL para juntar fecha y hora
+            $sql_cookie = "SELECT id FROM eventos 
+                           WHERE id_usuario = ? 
+                           AND TIMESTAMP(fecha, hora) BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR)";
+            
+            $stmt_cookie = $conexion->prepare($sql_cookie);
+            $stmt_cookie->bind_param("i", $fila['id']); // Usamos el ID del usuario
+            $stmt_cookie->execute();
+            $stmt_cookie->store_result(); // Necesario para contar filas
+
+            //  al menos 1 evento...
+            if ($stmt_cookie->num_rows > 0) {
+                // ...creamos la cookie "alerta_evento" con valor "1" que dura 1 hora 
+                setcookie("alerta_evento", "1", time() + 3600);
+            }
+            
+            $stmt_cookie->close();
+            
+            // --- FIN LÓGICA DE COOKIE ---
+
+            header("Location: index.php"); 
+            exit();
+
             header("Location: index.php"); 
             exit(); 
 
