@@ -62,37 +62,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recogemos todos los datos del formulario
     $titulo_form = $_POST["titulo"];
     $desc_form   = $_POST["descripcion"];
-    $fecha_form  = $_POST["fecha"];
-    $hora_form   = $_POST["hora"];
+    $fechaEnBruto  = new DateTime($_POST["fecha"]);
+    $fecha_form=$fechaEnBruto->format('d/m/Y');
+    $horaBruto = new DateTime($_POST["hora"]);
+    $hora_form = $horaBruto->format('H:i');
     $cat_form    = $_POST["categoria"];
     
     // Recogemos el ID oculto 
     $id_evento_form = $_POST["id_evento"];
-
+    //guaardamos la fecha de hoy 
+    $hoy=new DateTime();
     if (!empty($id_evento_form)) {
         // ACTUALIZAR
         $sql = "UPDATE eventos SET titulo=?, descripcion=?, fecha=?, hora=?, categoria=? WHERE id=? AND id_usuario=?";
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("sssssii", $titulo_form, $desc_form, $fecha_form, $hora_form, $cat_form, $id_evento_form, $id_usuario);
         
-        if($stmt->execute()){
-            header("Location: index.php");
-            exit();
-        } else {
-            $mensaje = "Error al actualizar: " . $stmt->error;
+        if($hoy->diff($fechaEnBruto)){
+            $mensaje = "Error al guardar: la fecha introducida no puede ser pasada. ";
+        }else{
+            if($stmt->execute()){
+                header("Location: index.php");
+                exit();
+            } else {
+                $mensaje = "Error al actualizar: " . $stmt->error;
+            }
         }
-
     } else {
         //  CREAR 
         $insertarDatos = "INSERT INTO eventos (id_usuario, titulo, descripcion, fecha, hora, categoria) VALUES (?,?,?,?,?,?)";
         $stmt = $conexion->prepare($insertarDatos);
-        $stmt->bind_param("isssss", $id_usuario, $titulo_form, $desc_form, $fecha_form, $hora_form, $cat_form);
+        if($hoy->diff($fechaEnBruto)){
+            $mensaje = "Error al guardar: la fecha introducida no puede ser pasada. ";
+        }else{
+            $stmt->bind_param("isssss", $id_usuario, $titulo_form, $desc_form, $fecha_form, $hora_form, $cat_form);
 
-        if($stmt->execute()){
-            $mensaje = "Evento guardado correctamente";
-        } else {
-            $mensaje = "Error al guardar: " . $stmt->error;
+            if($stmt->execute()){
+                $mensaje = "Evento guardado correctamente";
+            } else {
+                $mensaje = "Error al guardar: " . $stmt->error;
+            }
+
         }
+        
     }
     $stmt->close();
 }
@@ -115,7 +127,7 @@ $resultado = $consulta->get_result();
     <h1>Mis Eventos</h1>
     <?php if (isset($_COOKIE['alerta_evento'])): ?>
         <div>
-             ¡Atención! Tienes eventos programados para las próximas 24 horas.
+            <h2 style="color:orange">Tienes eventos programados para las próximas 24 horas!!</h2>
         </div>
     <?php endif; ?>
     <?php if($mensaje != "") echo "<p>$mensaje</p>"; ?>
@@ -134,13 +146,17 @@ $resultado = $consulta->get_result();
         <tbody>
             <?php
             while($fila = $resultado->fetch_assoc()){
+                $fechaEnBruto  = new DateTime($fila["fecha"]);
+                $fecha_form=$fechaEnBruto->format('d/m/Y');
+                $horaBruto = new DateTime($fila["hora"]);
+                $hora_form = $horaBruto->format('H:i');
                 echo "<tr>";
                 echo "<td>" . $fila["titulo"] . "</td>";
                 echo "<td>" . $fila["descripcion"] . "</td>";
-                echo "<td>" . $fila["fecha"] . "</td>";
-                echo "<td>" . $fila["hora"] . "</td>";
+                echo "<td>" . $fecha_form . "</td>";
+                echo "<td>" . $hora_form . "</td>";
                 echo "<td>" . $fila["categoria"] . "</td>";
-                
+    
                 echo "<td>";
                 echo "<a href='index.php?editar=" . $fila['id'] . "'>Editar</a>";
                 echo " | ";
