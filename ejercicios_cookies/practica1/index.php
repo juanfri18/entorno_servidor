@@ -70,13 +70,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_evento_form = $_POST["id_evento"];
 
     if (!empty($id_evento_form)) {
-        // ACTUALIZA
+        // ACTUALIZAR
         $sql = "UPDATE eventos SET titulo=?, descripcion=?, fecha=?, hora=?, categoria=? WHERE id=? AND id_usuario=?";
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("sssssii", $titulo_form, $desc_form, $fecha_form, $hora_form, $cat_form, $id_evento_form, $id_usuario);
         
         if($stmt->execute()){
-            // Al terminar, recargamos la página
             header("Location: index.php");
             exit();
         } else {
@@ -84,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
     } else {
-        //  CREAR (INSERT)
+        //  CREAR 
         $insertarDatos = "INSERT INTO eventos (id_usuario, titulo, descripcion, fecha, hora, categoria) VALUES (?,?,?,?,?,?)";
         $stmt = $conexion->prepare($insertarDatos);
         $stmt->bind_param("isssss", $id_usuario, $titulo_form, $desc_form, $fecha_form, $hora_form, $cat_form);
